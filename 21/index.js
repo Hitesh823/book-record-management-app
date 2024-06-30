@@ -1,47 +1,44 @@
+
 const express = require("express");
 
-// Importing Routes
+// import DB connection file
+const DbConnection = require("./databaseConnection");
+
+// import db 
+const dotenv = require("dotenv");
+
+
+// import routes
 const usersRouter = require("./routes/users");
 const booksRouter = require("./routes/books");
 
+dotenv.config();
+
 const app = express();
+
+DbConnection();
 
 const PORT = 8081;
 
 app.use(express.json());
 
-app.get("/", (req, res)=>{
-    res.status(200).json({
-        message: "Server is up and running sucessfully",
-    });
+// npm i nodemon --save-dev
+// const data = ["rohan", "dev"];
+app.get("/", (req, res) => {
+  res.status(200).json({
+    message: "Server is up and running succesfully",
+  });
 });
 
+// http://localhost:801/users/
 app.use("/users", usersRouter);
-app.use("/books", booksRouter)
+app.use("/books", booksRouter);
 
-/*
-this is for users
-app.delete("/users/:id",(req,res)=>{
- const {id} =req.params;
-
- const user = users.find((each)=> each.id === id);
- if(!user){
-    return res.status(404).json({success: false, message: "User Does Not Exist"});
-    }
-
-    const index = users.indexOf(user);
-    users.splice(index, 1);
-    return res.status(200).json({success: true, message: "User Deleted Successfully"});
- 
-
-})
-*/
-app.get("*",(req, res)=>{
-    res.status(404).json({
-        message: "This route doesn't exist",
-    });
-})
-
-app.listen(PORT, ()=>{
-    console.log(`Server is up and running at PORT ${PORT}`);
-})
+app.get("*", (req, res) => {
+  res.status(404).json({
+    message: "This route doesn't exist",
+  });
+});
+app.listen(PORT, () => {
+  console.log(`Server is running at port ${PORT}`);
+});
